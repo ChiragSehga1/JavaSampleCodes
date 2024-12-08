@@ -27,7 +27,7 @@ public class Stock {
     public String symbol;
     public String company;
     private double price;
-    private int quanity;
+    private volatile int quanity; //volatile for fast updation
     final Object lock = new Object();
 
     public Stock(String symbol, String company, double price) {
@@ -61,7 +61,7 @@ public class Stock {
     }
 
     void logTransaction(String logFileName,String transactionDetails){
-        System.out.println(transactionDetails);
+        System.out.println(transactionDetails + "| " + quanity);
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(logFileName,true))){ //true => append
             synchronized (StockMarket.getInstance().fileLock){
                 writer.write(transactionDetails);
